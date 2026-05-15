@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Read(//Users/adrianbrambila/**)",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(command -v node)",
+      "Bash(command -v npm)",
+      "Bash(command -v brew)",
+      "Read(//Applications/**)",
+      "Bash(brew install *)",
+      "Bash(npm --version)",
+      "Bash(npx create-vite@latest . --template react)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(tee /tmp/eva-dev.log)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(curl -s http://localhost:5173/src/App.jsx -o /dev/null -w \"App.jsx: %{http_code}\\\\n\")",
+      "mcp__Claude_Preview__preview_start",
+      "WebFetch(domain:evasdrapes.com)",
+      "Bash(curl -s -o /Users/adrianbrambila/Documents/eva-dashboard/public/eva-logo.png \"https://static.wixstatic.com/media/72a56a_7d704d49f7454dac808ffd6e13e567ec~mv2.png\")",
+      "Bash(sips -z 192 192 -p 192 192 --padColor F5F2ED eva-logo.png --out icon-192.png)",
+      "Bash(sips -z 512 512 -p 512 512 --padColor F5F2ED eva-logo.png --out icon-512.png)",
+      "Bash(sips -z 180 180 -p 180 180 --padColor F5F2ED eva-logo.png --out apple-touch-icon.png)",
+      "Bash(curl -s -o /dev/null -w \"manifest: %{http_code}\\\\n\" http://localhost:5173/manifest.webmanifest)",
+      "Bash(curl -s -o /dev/null -w \"sw.js: %{http_code}\\\\n\" http://localhost:5173/sw.js)",
+      "Bash(curl -s -o /dev/null -w \"logo: %{http_code}\\\\n\" http://localhost:5173/eva-logo.png)",
+      "Bash(curl -s -o /dev/null -w \"apple-icon: %{http_code}\\\\n\" http://localhost:5173/apple-touch-icon.png)",
+      "Bash(curl -s -o /dev/null -w \"icon-192: %{http_code}\\\\n\" http://localhost:5173/icon-192.png)"
+    ]
+  }
+}
