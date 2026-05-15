@@ -12,6 +12,7 @@ body {
   color: #2C2A25;
   font-family: 'Jost', system-ui, -apple-system, Segoe UI, sans-serif;
   font-weight: 400;
+  font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -203,7 +204,7 @@ a {
 
 .brand-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 500;
   color: #2C2A25;
   letter-spacing: 0.4px;
@@ -225,7 +226,7 @@ a {
 
 .clock-time {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 500;
   letter-spacing: 1px;
   color: #2C2A25;
@@ -234,7 +235,7 @@ a {
 
 .clock-date {
   font-family: 'Jost', sans-serif;
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: #8A7F6E;
   text-transform: capitalize;
   margin-top: 2px;
@@ -254,7 +255,7 @@ a {
 
 .greeting {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 40px;
+  font-size: 44px;
   font-weight: 500;
   color: #2C2A25;
   margin: 4px 0 0;
@@ -276,14 +277,14 @@ a {
 
 .card-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 500;
   color: #2C2A25;
 }
 
 .card-subtitle {
   font-family: 'Jost', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   color: #8A7F6E;
   margin: 4px 0 0;
 }
@@ -304,10 +305,10 @@ a {
   border: none;
   background: transparent;
   font-family: 'Jost', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: #8A7F6E;
-  padding: 9px 24px;
+  padding: 10px 26px;
   border-radius: 999px;
   cursor: pointer;
   transition: background-color 0.18s ease, color 0.18s ease;
@@ -340,7 +341,7 @@ a {
 
 .step-label {
   font-family: 'Jost', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 2px;
   color: #C8922A;
@@ -406,14 +407,14 @@ a {
 
 .big-choice-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 500;
   color: #2C2A25;
 }
 
 .big-choice-sub {
   font-family: 'Jost', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   color: #8A7F6E;
 }
 
@@ -474,7 +475,7 @@ a {
 
 .shade-type-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 500;
   color: #2C2A25;
   line-height: 1.15;
@@ -513,7 +514,7 @@ a {
 
 .field-label {
   font-family: 'Jost', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: #2C2A25;
   letter-spacing: 0.3px;
@@ -521,7 +522,7 @@ a {
 
 .field-note {
   font-family: 'Jost', sans-serif;
-  font-size: 12.5px;
+  font-size: 13px;
   color: #8A7F6E;
   margin: -6px 0 0;
 }
@@ -553,9 +554,9 @@ a {
   border: none;
   background: transparent;
   font-family: 'Jost', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: #2C2A25;
-  padding: 11px 14px;
+  padding: 12px 14px;
   border-radius: 10px;
   outline: none;
 }
@@ -577,7 +578,7 @@ a {
 
 .field-suffix {
   font-family: 'Jost', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   color: #8A7F6E;
   padding-right: 14px;
   white-space: nowrap;
@@ -600,9 +601,9 @@ a {
   background-color: #FDFCF9;
   color: #2C2A25;
   font-family: 'Jost', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
-  padding: 12px 14px;
+  padding: 13px 14px;
   border-radius: 10px;
   cursor: pointer;
   transition: border-color 0.18s ease, background-color 0.18s ease;
@@ -624,7 +625,7 @@ a {
   align-items: center;
   gap: 10px;
   font-family: 'Jost', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   color: #2C2A25;
   cursor: pointer;
   user-select: none;
@@ -635,6 +636,42 @@ a {
   height: 18px;
   accent-color: #2C2A25;
   cursor: pointer;
+}
+
+.shade-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  background-color: #EDE8DF;
+  border: 1px solid #E5E0D8;
+  border-radius: 12px;
+}
+
+.shade-list-header {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: #C8922A;
+  font-weight: 500;
+}
+
+.shade-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background-color: #FDFCF9;
+  border: 1px solid #E5E0D8;
+  border-radius: 10px;
+}
+
+.shade-row-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #2C2A25;
 }
 
 .repeat-fields {
@@ -659,10 +696,10 @@ a {
   background-color: #2C2A25;
   color: #F5F2ED;
   font-family: 'Jost', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.6px;
-  padding: 14px 34px;
+  padding: 15px 36px;
   border-radius: 999px;
   cursor: pointer;
   transition: background-color 0.18s ease, transform 0.1s ease;
@@ -687,7 +724,7 @@ a {
 
 .results-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 500;
   color: #2C2A25;
   margin-bottom: 14px;
@@ -725,7 +762,7 @@ a {
 
 .result-label {
   font-family: 'Jost', sans-serif;
-  font-size: 11.5px;
+  font-size: 12.5px;
   text-transform: uppercase;
   letter-spacing: 1.4px;
   color: #8A7F6E;
@@ -734,7 +771,7 @@ a {
 
 .result-value {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 500;
   color: #2C2A25;
   display: flex;
@@ -744,9 +781,54 @@ a {
 
 .result-unit {
   font-family: 'Jost', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   color: #8A7F6E;
   letter-spacing: 0.6px;
+}
+
+.yardage-breakdown {
+  margin-top: 14px;
+  background-color: #FDFCF9;
+  border: 1px solid #E5E0D8;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-family: 'Jost', sans-serif;
+  font-size: 15px;
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 0;
+  color: #2C2A25;
+}
+
+.breakdown-row + .breakdown-row {
+  border-top: 1px dashed #E5E0D8;
+}
+
+.breakdown-label {
+  color: #8A7F6E;
+}
+
+.breakdown-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.breakdown-total {
+  padding-top: 8px;
+}
+
+.breakdown-total .breakdown-label,
+.breakdown-total .breakdown-value {
+  color: #2C2A25;
+  font-weight: 600;
+}
+
+.breakdown-total .breakdown-value {
+  color: #C8922A;
 }
 
 .results-extras {
@@ -782,7 +864,7 @@ a {
 
 .results-note {
   font-family: 'Jost', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   color: #2C2A25;
   margin: 16px 0 0;
   line-height: 1.65;
@@ -815,14 +897,14 @@ a {
 
 .placeholder-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 500;
   color: #2C2A25;
 }
 
 .placeholder-desc {
   font-family: 'Jost', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   color: #8A7F6E;
   margin: 0;
   flex: 1;
@@ -832,13 +914,13 @@ a {
   align-self: flex-start;
   margin-top: 6px;
   font-family: 'Jost', sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   background-color: #EDE8DF;
   color: #C8922A;
   border: 1px solid #E5E0D8;
-  padding: 5px 12px;
+  padding: 6px 13px;
   border-radius: 999px;
   font-weight: 500;
 }
@@ -846,8 +928,8 @@ a {
 /* ===== Jindaro footer ===== */
 .jindaro-footer {
   background-color: #1E2438;
-  padding: 56px 24px;
-  padding-bottom: max(56px, env(safe-area-inset-bottom));
+  padding: 28px 24px;
+  padding-bottom: max(28px, env(safe-area-inset-bottom));
   display: flex;
   justify-content: center;
 }
@@ -855,24 +937,24 @@ a {
 .jindaro-card {
   text-align: center;
   max-width: 560px;
-  padding: 8px 0;
+  padding: 4px 0;
   position: relative;
 }
 
 .jindaro-eyebrow {
   display: block;
   font-family: 'Jost', sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 300;
   text-transform: uppercase;
-  letter-spacing: 4px;
+  letter-spacing: 3px;
   color: rgba(245, 242, 237, 0.55);
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .jindaro-mark {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 72px;
+  font-size: 38px;
   font-weight: 500;
   color: #F5F2ED;
   letter-spacing: 0.4px;
@@ -885,16 +967,16 @@ a {
 
 .jindaro-dot {
   color: #C8922A;
-  font-size: 76px;
+  font-size: 40px;
   line-height: 1;
 }
 
 .jindaro-tagline {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 400;
   color: rgba(245, 242, 237, 0.78);
-  margin: 16px 0 0;
+  margin: 8px 0 0;
   font-style: normal;
   letter-spacing: 0.3px;
 }
@@ -922,6 +1004,9 @@ a {
 }
 
 @media (max-width: 880px) {
+  body {
+    font-size: 17px;
+  }
   .site-header {
     padding: 18px 20px;
     flex-direction: column;
@@ -935,14 +1020,20 @@ a {
   .clock {
     text-align: left;
   }
-  .brand-name {
+  .clock-time {
     font-size: 24px;
+  }
+  .clock-date {
+    font-size: 14px;
+  }
+  .brand-name {
+    font-size: 26px;
   }
   .brand-logo {
     height: 44px;
   }
   .greeting {
-    font-size: 32px;
+    font-size: 36px;
   }
   .main {
     padding: 28px 18px 40px;
@@ -950,23 +1041,85 @@ a {
   .card {
     padding: 22px;
   }
+  .card-title {
+    font-size: 30px;
+  }
+  .card-subtitle {
+    font-size: 15px;
+  }
   .placeholders {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .placeholder-title {
+    font-size: 22px;
+  }
+  .placeholder-desc {
+    font-size: 15px;
   }
   .shade-types {
     grid-template-columns: repeat(2, 1fr);
   }
+  .field-label {
+    font-size: 15px;
+  }
+  .field input,
+  .field select {
+    font-size: 17px;
+    padding: 13px 14px;
+  }
+  .field-suffix,
+  .field-note {
+    font-size: 14px;
+  }
+  .tab {
+    font-size: 15px;
+  }
+  .pill-btn {
+    font-size: 16px;
+    padding: 14px 14px;
+  }
+  .big-choice-btn {
+    padding: 20px 22px;
+  }
+  .big-choice-title {
+    font-size: 24px;
+  }
+  .big-choice-sub {
+    font-size: 14px;
+  }
+  .checkbox-row {
+    font-size: 15px;
+  }
+  .calc-button {
+    font-size: 17px;
+    padding: 16px 32px;
+    width: 100%;
+    text-align: center;
+  }
+  .results-note {
+    font-size: 14px;
+  }
+  .yardage-breakdown {
+    font-size: 16px;
+  }
+  .result-value {
+    font-size: 30px;
+  }
+  .jindaro-footer {
+    padding: 22px 18px;
+    padding-bottom: max(22px, env(safe-area-inset-bottom));
+  }
   .jindaro-mark {
-    font-size: 56px;
+    font-size: 30px;
   }
   .jindaro-dot {
-    font-size: 60px;
+    font-size: 32px;
   }
   .jindaro-tagline {
-    font-size: 17px;
+    font-size: 13px;
   }
   .jindaro-eyebrow {
-    letter-spacing: 3px;
+    letter-spacing: 2.5px;
   }
 }
 

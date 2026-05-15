@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import {
-  HEM_ALLOWANCE,
+  HEM_PLEATED,
+  HEM_RIPPLE,
   OVERLAP,
   ButtonGroup,
   CalculateButton,
@@ -9,7 +10,7 @@ import {
   ReadOnlyField,
   Results,
   SelectField,
-  ceilYards,
+  buildBreakdown,
   roundUpToEven,
   roundUpToHalf,
   roundUpToMultiple,
@@ -83,15 +84,15 @@ function StationaryForm() {
     const totalWidthsRaw = adjustedWidthsPerPanel * p
     const widthsNeeded = Math.ceil(totalWidthsRaw * 2) / 2
 
-    const baseCut = fl + HEM_ALLOWANCE
+    const baseCut = fl + HEM_PLEATED
     const { length: cutLength, note: repeatNote } = applyVerticalRepeat(
       baseCut,
       hasRepeat,
       vRepeat,
     )
 
-    const totalYards = (widthsNeeded * cutLength) / 36
-    const yardsRounded = ceilYards(totalYards)
+    const totalInches = widthsNeeded * cutLength
+    const breakdown = buildBreakdown(totalInches)
 
     const adjustmentNote =
       fw === 54
@@ -101,9 +102,14 @@ function StationaryForm() {
     setResult({
       widthsNeeded: widthsNeeded.toString(),
       cutLength: cutLength.toFixed(2),
-      totalYardage: yardsRounded.toFixed(2),
+      totalYardage: breakdown.total.toFixed(2),
+      breakdown: {
+        needed: breakdown.needed.toFixed(2),
+        overage: breakdown.overage.toFixed(2),
+        total: breakdown.total.toFixed(2),
+      },
       note:
-        `${p} panel${p === 1 ? '' : 'es'} · ${wpp} width(s)/panel · hem ${HEM_ALLOWANCE}" incluido.` +
+        `${p} panel${p === 1 ? '' : 'es'} · ${wpp} width(s)/panel · hem ${HEM_PLEATED}" incluido.` +
         adjustmentNote +
         repeatNote,
     })
@@ -145,7 +151,7 @@ function StationaryForm() {
         />
       </div>
 
-      <ReadOnlyField label="Hem allowance" value={HEM_ALLOWANCE} suffix="in (fijo)" />
+      <ReadOnlyField label="Hem allowance" value={HEM_PLEATED} suffix="in (fijo)" />
 
       <PatternRepeatToggle checked={hasRepeat} onChange={setHasRepeat} />
 
@@ -201,21 +207,26 @@ function RingsCarriersForm() {
     const widthsRaw = totalInches / fw
     const widthsNeeded = roundUpToHalf(widthsRaw)
 
-    const baseCut = fl + HEM_ALLOWANCE
+    const baseCut = fl + HEM_PLEATED
     const { length: cutLength, note: repeatNote } = applyVerticalRepeat(
       baseCut,
       hasRepeat,
       vRepeat,
     )
 
-    const totalYards = (widthsNeeded * cutLength) / 36
-    const yardsRounded = ceilYards(totalYards)
+    const totalFabricInches = widthsNeeded * cutLength
+    const breakdown = buildBreakdown(totalFabricInches)
     const approxRings = Math.round(widthsNeeded * 5)
 
     setResult({
       widthsNeeded: widthsNeeded.toString(),
       cutLength: cutLength.toFixed(2),
-      totalYardage: yardsRounded.toFixed(2),
+      totalYardage: breakdown.total.toFixed(2),
+      breakdown: {
+        needed: breakdown.needed.toFixed(2),
+        overage: breakdown.overage.toFixed(2),
+        total: breakdown.total.toFixed(2),
+      },
       extras: [
         {
           label: 'Anillos aprox.',
@@ -281,7 +292,7 @@ function RingsCarriersForm() {
 
       <div className="grid-2">
         <ReadOnlyField label="Overlap" value={OVERLAP} suffix="in (fijo)" />
-        <ReadOnlyField label="Hem allowance" value={HEM_ALLOWANCE} suffix="in (fijo)" />
+        <ReadOnlyField label="Hem allowance" value={HEM_PLEATED} suffix="in (fijo)" />
       </div>
 
       <PatternRepeatToggle checked={hasRepeat} onChange={setHasRepeat} />
@@ -342,21 +353,26 @@ function RippleFoldForm() {
     const totalInches = snapTape + sideHems + returnsTotal
     const widthsNeeded = Math.ceil(totalInches / fw)
 
-    const baseCut = fl + HEM_ALLOWANCE
+    const baseCut = fl + HEM_RIPPLE
     const { length: cutLength, note: repeatNote } = applyVerticalRepeat(
       baseCut,
       hasRepeat,
       vRepeat,
     )
 
-    const totalYards = (widthsNeeded * cutLength) / 36
-    const yardsRounded = ceilYards(totalYards)
+    const totalFabricInches = widthsNeeded * cutLength
+    const breakdown = buildBreakdown(totalFabricInches)
     const totalSnapButtons = baseCarriers + 4 * p
 
     setResult({
       widthsNeeded: widthsNeeded.toString(),
       cutLength: cutLength.toFixed(2),
-      totalYardage: yardsRounded.toFixed(2),
+      totalYardage: breakdown.total.toFixed(2),
+      breakdown: {
+        needed: breakdown.needed.toFixed(2),
+        overage: breakdown.overage.toFixed(2),
+        total: breakdown.total.toFixed(2),
+      },
       extras: [
         {
           label: 'Snap buttons',
@@ -430,7 +446,11 @@ function RippleFoldForm() {
 
       <div className="grid-2">
         <ReadOnlyField label="Overlap" value={OVERLAP} suffix="in (fijo)" />
-        <ReadOnlyField label="Hem allowance" value={HEM_ALLOWANCE} suffix="in (fijo)" />
+        <ReadOnlyField
+          label="Hem allowance"
+          value={HEM_RIPPLE}
+          suffix={`in (${HEM_RIPPLE - 3} bottom + 3 top)`}
+        />
       </div>
 
       <PatternRepeatToggle checked={hasRepeat} onChange={setHasRepeat} />

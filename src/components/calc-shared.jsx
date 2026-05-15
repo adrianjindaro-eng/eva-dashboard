@@ -1,4 +1,5 @@
-export const HEM_ALLOWANCE = 15
+export const HEM_PLEATED = 16
+export const HEM_RIPPLE = 11
 export const OVERLAP = 3.5
 export const ROMAN_WIDTH_ALLOWANCE = 8
 export const ROMAN_LENGTH_ALLOWANCE = 10
@@ -19,6 +20,41 @@ export function roundUpToHalf(value) {
 
 export function ceilYards(yards) {
   return Math.ceil(yards * 2) / 2
+}
+
+export const OVERAGE_PCT = 0.1
+
+export function buildBreakdown(rawInches) {
+  const needed = rawInches / 36
+  const overage = needed * OVERAGE_PCT
+  const total = needed + overage
+  const rounded = ceilYards(total)
+  return {
+    needed: needed,
+    overage: overage,
+    total: rounded,
+  }
+}
+
+export function packOverages(overages, fabWidth) {
+  const sorted = [...overages].sort((a, b) => b.overage - a.overage)
+  const bins = []
+  for (const o of sorted) {
+    if (o.overage <= 0) continue
+    let placed = false
+    for (const bin of bins) {
+      if (bin.remaining >= o.overage) {
+        bin.remaining -= o.overage
+        if (o.cutLength > bin.maxLength) bin.maxLength = o.cutLength
+        placed = true
+        break
+      }
+    }
+    if (!placed) {
+      bins.push({ remaining: fabWidth - o.overage, maxLength: o.cutLength })
+    }
+  }
+  return bins
 }
 
 export function NumberField({
@@ -134,13 +170,31 @@ export function Results({ data }) {
           </div>
         </div>
         <div className="result-card highlight">
-          <div className="result-label">Total yardage</div>
+          <div className="result-label">Total a ordenar</div>
           <div className="result-value">
             {data.totalYardage}
             <span className="result-unit">yds</span>
           </div>
         </div>
       </div>
+
+      {data.breakdown && (
+        <div className="yardage-breakdown">
+          <div className="breakdown-row">
+            <span className="breakdown-label">Yardage needed</span>
+            <span className="breakdown-value">{data.breakdown.needed} yds</span>
+          </div>
+          <div className="breakdown-row">
+            <span className="breakdown-label">10% overage</span>
+            <span className="breakdown-value">{data.breakdown.overage} yds</span>
+          </div>
+          <div className="breakdown-row breakdown-total">
+            <span className="breakdown-label">Total a ordenar</span>
+            <span className="breakdown-value">{data.breakdown.total} yds</span>
+          </div>
+        </div>
+      )}
+
       {Array.isArray(data.extras) && data.extras.length > 0 && (
         <div className="results-extras">
           {data.extras.map((e, i) => (
