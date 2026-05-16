@@ -172,11 +172,67 @@ function StationaryForm() {
   )
 }
 
+const PLEAT_STYLE_OPTIONS = [
+  { value: 'pinch', label: 'Pinch Pleat' },
+  { value: 'french', label: 'French Pleat' },
+]
+
+const PLEAT_SIZE = 5 // inches consumed per pleat
+const PLEAT_SPACING_MIN = 4
+const PLEAT_SPACING_MAX = 6
+const PLEAT_SIDE_HEMS = 3 // 1.5" per side × 2
+const PLEAT_LEADING_EDGE = 3.5
+
+// Per-panel pleat math:
+// 1. Base pleat count targets ~5" spacing: P_base = round(FW / 5)
+// 2. Add 1 ease pleat → P_total = P_base + 1
+// 3. Verify spacing = FW / P_total ∈ [4, 6], adjust ±1 if outside
+// 4. Required flat fabric = FW + P_total × 5
+// 5. Widths per panel = ceil(required_flat / fw) to next half-width
+function pleatMathForPanel(finishedWidth, fabricWidth) {
+  const pBase = Math.max(2, Math.round(finishedWidth / 5))
+  let pTotal = pBase + 1
+  let spacing = finishedWidth / pTotal
+
+  // Spacing too tight → drop a pleat (widens spacing)
+  while (spacing < PLEAT_SPACING_MIN && pTotal > 2) {
+    pTotal -= 1
+    spacing = finishedWidth / pTotal
+  }
+  // Spacing too wide → add a pleat (narrows spacing)
+  while (spacing > PLEAT_SPACING_MAX) {
+    pTotal += 1
+    spacing = finishedWidth / pTotal
+  }
+
+  const requiredFlat = finishedWidth + pTotal * PLEAT_SIZE
+  const widthsPerPanel = roundUpToHalf(requiredFlat / fabricWidth)
+
+  return { finishedWidth, pTotal, spacing, requiredFlat, widthsPerPanel }
+}
+
+function finishedWidthPerPanel(rod, panels, returnSize, kind) {
+  // Each panel's flat finished-width along the rod (after pleating):
+  //   End:    rod/panels + return + 3.5 leading edge + 3 side hems
+  //   Center: rod/panels + 3.5 + 3.5 leading edges + 3 side hems
+  //   Single: rod        + return + 3.5 leading edge + 3 side hems
+  const baseShare = panels === 1 ? rod : rod / panels
+  if (kind === 'single') {
+    return baseShare + returnSize + PLEAT_LEADING_EDGE + PLEAT_SIDE_HEMS
+  }
+  if (kind === 'end') {
+    return baseShare + returnSize + PLEAT_LEADING_EDGE + PLEAT_SIDE_HEMS
+  }
+  // center
+  return baseShare + PLEAT_LEADING_EDGE + PLEAT_LEADING_EDGE + PLEAT_SIDE_HEMS
+}
+
 function RingsCarriersForm() {
-  const [rodSize, setRodSize] = useState('72')
+  const [pleatStyle, setPleatStyle] = useState('pinch')
+  const [rodSize, setRodSize] = useState('100')
   const [panels, setPanels] = useState('2')
   const [fabricWidth, setFabricWidth] = useState('54')
-  const [returnChoice, setReturnChoice] = useState('4')
+  const [returnChoice, setReturnChoice] = useState('8')
   const [customReturn, setCustomReturn] = useState('')
   const [finishedLength, setFinishedLength] = useState('96')
   const [hasRepeat, setHasRepeat] = useState(false)
@@ -201,11 +257,28 @@ function RingsCarriersForm() {
       return
     }
 
-    const sideHems = 3 * 2 * p
-    const returnsTotal = ret * p
-    const totalInches = rod * 2.5 + sideHems + returnsTotal
-    const widthsRaw = totalInches / fw
-    const widthsNeeded = roundUpToHalf(widthsRaw)
+    // Compute per-panel results, grouped by kind
+    const groups = []
+    if (p === 1) {
+      const fwPanel = finishedWidthPerPanel(rod, 1, ret, 'single')
+      groups.push({ kind: 'single', count: 1, ...pleatMathForPanel(fwPanel, fw) })
+    } else {
+      const endFW = finishedWidthPerPanel(rod, p, ret, 'end')
+      groups.push({ kind: 'end', count: 2, ...pleatMathForPanel(endFW, fw) })
+      if (p > 2) {
+        const centerFW = finishedWidthPerPanel(rod, p, ret, 'center')
+        groups.push({
+          kind: 'center',
+          count: p - 2,
+          ...pleatMathForPanel(centerFW, fw),
+        })
+      }
+    }
+
+    const totalWidths = groups.reduce(
+      (sum, g) => sum + g.widthsPerPanel * g.count,
+      0,
+    )
 
     const baseCut = fl + HEM_PLEATED
     const { length: cutLength, note: repeatNote } = applyVerticalRepeat(
@@ -214,12 +287,61 @@ function RingsCarriersForm() {
       vRepeat,
     )
 
-    const totalFabricInches = widthsNeeded * cutLength
+    const totalFabricInches = totalWidths * cutLength
     const breakdown = buildBreakdown(totalFabricInches)
-    const approxRings = Math.round(widthsNeeded * 5)
+    const approxRings = Math.round(totalWidths * 5)
+
+    // Format per-panel breakdown for display
+    const kindLabel = (k, count) => {
+      if (k === 'single') return count === 1 ? 'panel' : 'paneles'
+      if (k === 'end') return count === 1 ? 'panel extremo' : 'paneles extremos'
+      return count === 1 ? 'panel central' : 'paneles centrales'
+    }
+    const panelSummary = groups
+      .map(
+        (g) =>
+          `${g.count} ${kindLabel(g.kind, g.count)}: ` +
+          `FW ${g.finishedWidth.toFixed(2)}" → ${g.widthsPerPanel} widths · ` +
+          `${g.pTotal} pleats · spacing ${g.spacing.toFixed(2)}"`,
+      )
+      .join(' · ')
+
+    // Extras: if mixed end/center, show "end / center" pairs; otherwise single value
+    const multiKind = groups.length > 1
+    const fmtPerPanel = (key, decimals = 0, suffix = '') =>
+      groups
+        .map((g) =>
+          typeof g[key] === 'number'
+            ? `${g[key].toFixed(decimals)}${suffix}`
+            : `${g[key]}${suffix}`,
+        )
+        .join(' / ')
+
+    const extras = [
+      {
+        label: 'Widths por panel',
+        value: fmtPerPanel('widthsPerPanel', 1),
+        hint: multiKind ? 'extremo / central' : null,
+      },
+      {
+        label: 'Pleats por panel',
+        value: fmtPerPanel('pTotal'),
+        hint: multiKind ? 'extremo / central' : null,
+      },
+      {
+        label: 'Spacing',
+        value: fmtPerPanel('spacing', 2, '"'),
+        hint: multiKind ? 'extremo / central' : null,
+      },
+      {
+        label: 'Anillos aprox.',
+        value: approxRings,
+        hint: '(aproximado — confirmar con proveedor)',
+      },
+    ]
 
     setResult({
-      widthsNeeded: widthsNeeded.toString(),
+      widthsNeeded: totalWidths.toFixed(1),
       cutLength: cutLength.toFixed(2),
       totalYardage: breakdown.total.toFixed(2),
       breakdown: {
@@ -227,22 +349,26 @@ function RingsCarriersForm() {
         overage: breakdown.overage.toFixed(2),
         total: breakdown.total.toFixed(2),
       },
-      extras: [
-        {
-          label: 'Anillos aprox.',
-          value: approxRings,
-          hint: '(aproximado — confirmar con proveedor)',
-        },
-      ],
+      extras,
       note:
-        `Rod ${rod}" × 2.5 = ${(rod * 2.5).toFixed(2)}" + hems ${sideHems}" + returns ${returnsTotal}". ` +
-        `Total ${totalInches.toFixed(2)}" ÷ ${fw}" = ${widthsRaw.toFixed(2)} → ${widthsNeeded} widths (half-width).` +
+        `${pleatStyle === 'pinch' ? 'Pinch' : 'French'} pleat · ${panelSummary}. ` +
+        `Hem ${HEM_PLEATED}" incluido en cut length. ` +
+        `Las costuras deben caer al lado o entre pleats, nunca dentro.` +
         repeatNote,
     })
   }
 
   return (
     <div className="calc-form">
+      <ButtonGroup
+        label="Pleat style"
+        value={pleatStyle}
+        onChange={setPleatStyle}
+        options={PLEAT_STYLE_OPTIONS}
+        columns={2}
+        note="Estilo visual — no afecta el cálculo."
+      />
+
       <div className="grid-2">
         <NumberField
           label="Rod size"
@@ -291,7 +417,7 @@ function RingsCarriersForm() {
       )}
 
       <div className="grid-2">
-        <ReadOnlyField label="Overlap" value={OVERLAP} suffix="in (fijo)" />
+        <ReadOnlyField label="Leading edge" value={OVERLAP} suffix="in (fijo)" />
         <ReadOnlyField label="Hem allowance" value={HEM_PLEATED} suffix="in (fijo)" />
       </div>
 
