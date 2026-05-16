@@ -14,6 +14,7 @@ import {
   roundUpToEven,
   roundUpToHalf,
   roundUpToMultiple,
+  toEighthFraction,
 } from './calc-shared.jsx'
 
 const PANEL_OPTIONS = [1, 2, 3, 4, 5, 6].map((n) => ({
@@ -302,7 +303,7 @@ function RingsCarriersForm() {
         (g) =>
           `${g.count} ${kindLabel(g.kind, g.count)}: ` +
           `FW ${g.finishedWidth.toFixed(2)}" → ${g.widthsPerPanel} widths · ` +
-          `${g.pTotal} pleats · spacing ${g.spacing.toFixed(2)}"`,
+          `${g.pTotal} pleats · spacing ${toEighthFraction(g.spacing)}"`,
       )
       .join(' · ')
 
@@ -316,21 +317,30 @@ function RingsCarriersForm() {
             : `${g[key]}${suffix}`,
         )
         .join(' / ')
+    const fmtPerPanelFraction = (key) =>
+      groups
+        .map((g) =>
+          typeof g[key] === 'number' ? toEighthFraction(g[key]) : String(g[key]),
+        )
+        .join(' · ')
 
-    const extras = [
+    const primaryExtras = [
       {
-        label: 'Widths por panel',
-        value: fmtPerPanel('widthsPerPanel', 1),
-        hint: multiKind ? 'extremo / central' : null,
-      },
-      {
-        label: 'Pleats por panel',
+        label: 'Pleats per panel',
         value: fmtPerPanel('pTotal'),
         hint: multiKind ? 'extremo / central' : null,
       },
       {
-        label: 'Spacing',
-        value: fmtPerPanel('spacing', 2, '"'),
+        label: 'Spacing between pleats',
+        value: fmtPerPanelFraction('spacing'),
+        unit: 'in',
+        hint: multiKind ? 'extremo · central' : null,
+      },
+    ]
+    const extras = [
+      {
+        label: 'Widths por panel',
+        value: fmtPerPanel('widthsPerPanel', 1),
         hint: multiKind ? 'extremo / central' : null,
       },
       {
@@ -349,6 +359,7 @@ function RingsCarriersForm() {
         overage: breakdown.overage.toFixed(2),
         total: breakdown.total.toFixed(2),
       },
+      primaryExtras,
       extras,
       note:
         `${pleatStyle === 'pinch' ? 'Pinch' : 'French'} pleat · ${panelSummary}. ` +
@@ -507,7 +518,7 @@ function RippleFoldForm() {
         },
       ],
       note:
-        `Fullness ${fullness}% · spacing ${spacing}" → ${baseCarriers} carriers base (par). ` +
+        `Fullness ${fullness}% · spacing ${toEighthFraction(spacing)}" → ${baseCarriers} carriers base (par). ` +
         `Snap tape ${snapTape.toFixed(2)}" + hems ${sideHems}" + returns ${returnsTotal}" = ${totalInches.toFixed(2)}" ÷ ${fw}" = ${widthsNeeded} widths.` +
         repeatNote,
     })

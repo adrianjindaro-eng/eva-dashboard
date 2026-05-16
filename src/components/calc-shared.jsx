@@ -18,6 +18,24 @@ export function roundUpToHalf(value) {
   return Math.ceil(value * 2) / 2
 }
 
+const EIGHTH_FRACTIONS = ['', '1/8', '1/4', '3/8', '1/2', '5/8', '3/4', '7/8']
+
+// Format a decimal inch value as a mixed fraction rounded to the nearest 1/8".
+// 4.61  -> "4 5/8"
+// 4.0   -> "4"
+// 2.125 -> "2 1/8"
+// 0.5   -> "1/2"
+export function toEighthFraction(value) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return String(value)
+  const sign = value < 0 ? '-' : ''
+  const eighths = Math.round(Math.abs(value) * 8)
+  const whole = Math.floor(eighths / 8)
+  const r = eighths % 8
+  if (r === 0) return `${sign}${whole}`
+  if (whole === 0) return `${sign}${EIGHTH_FRACTIONS[r]}`
+  return `${sign}${whole} ${EIGHTH_FRACTIONS[r]}`
+}
+
 export function ceilYards(yards) {
   return Math.ceil(yards * 2) / 2
 }
@@ -176,6 +194,17 @@ export function Results({ data }) {
             <span className="result-unit">yds</span>
           </div>
         </div>
+        {Array.isArray(data.primaryExtras) &&
+          data.primaryExtras.map((e, i) => (
+            <div key={`primary-${i}`} className="result-card">
+              <div className="result-label">{e.label}</div>
+              <div className="result-value">
+                {e.value}
+                {e.unit && <span className="result-unit">{e.unit}</span>}
+              </div>
+              {e.hint && <div className="result-card-hint">{e.hint}</div>}
+            </div>
+          ))}
       </div>
 
       {data.breakdown && (

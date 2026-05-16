@@ -831,6 +831,15 @@ a {
   color: #C8922A;
 }
 
+.result-card-hint {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-style: italic;
+  color: #8A7F6E;
+  margin-top: 4px;
+  letter-spacing: 0.2px;
+}
+
 .results-extras {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
